@@ -1,6 +1,6 @@
 ![](https://github.com/fission-suite/PROJECTNAME/raw/master/assets/logo.png?sanitize=true)
 
-# Project Name
+# Interplanetary Image Metadata and Resizer
 
 [![Build Status](https://travis-ci.org/fission-suite/PROJECTNAME.svg?branch=master)](https://travis-ci.org/fission-suite/PROJECTNAME)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/fission-suite/blob/master/LICENSE)
@@ -8,6 +8,8 @@
 [![Built by FISSION](https://img.shields.io/badge/⌘-Built_by_FISSION-purple.svg)](https://fission.codes)
 [![Discord](https://img.shields.io/discord/478735028319158273.svg)](https://discord.gg/zAQBDEq)
 [![Discourse](https://img.shields.io/discourse/https/talk.fission.codes/topics)](https://talk.fission.codes)
+
+Ymir is a mighty giant from Norse Mythology. Iimir is a tool that smashes images into different sizes, and links them together with metadata on IPFS, the InterPlanetary File System.
 
 An amazing description goes here!
 
