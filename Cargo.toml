@@ -1,0 +1,10 @@
+[package]
+name = "iimir"
+version = "0.1.0"
+authors = ["Elliott Benisty <elliott.benisty@polytechnique.edu>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+libvips = "1.2.0"

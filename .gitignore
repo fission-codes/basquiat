@@ -1228,3 +1228,12 @@ TSWLatexianTemp*
 *.glstex
 
 # End of https://www.gitignore.io/api/latex
+
+
+#Added by cargo
+
+/target
+Cargo.lock
+
+#Custom
+thumbnails
