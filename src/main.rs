@@ -38,12 +38,16 @@ fn main() {
     //     let resized = ops::resize(&image, *target).expect("Resize failed");
     //     resized.image_write_to_file(&format!("{}/{}.{}", &current_dir, target, img_ext)).expect("Failed to write output");
     // }
-    Command::new("ipfs")
-        .arg("add")
-        .arg("-r")
-        .arg(current_dir)
-        .status()
-        .expect("Failed to add to ipfs");
+    // let cid = Command::new("ipfs")
+    //     .args(&["add", "-r", "-Q"])
+    //     .arg(current_dir)
+    //     .output()
+    //     .expect("Failed to add to ipfs");
+    // let cid = String::from_utf8(cid.stdout).expect("Failed to parse stdout from ipfs add command");
+    let versions = Path::new(&current_dir)
+        .read_dir().expect("Failed to open temp output directory");
+    let cid = ipfs_lib::store(img_path_str, versions);
+    println!("Content at : {}", &cid);
 }
 
 fn print_help(){
@@ -59,7 +63,38 @@ fn batch_resize<T : Resizable>(image : &T, directory : &str, target_scales : &[f
 }
 
 
+mod ipfs_lib {
+    use std::{process::Command, path::Path, fs::ReadDir};
 
+    pub fn store(original_filepath : &str, version_paths: ReadDir) -> String{
+        let add_arguments = ["add", "-r", "-Q"];
+        let update_arguments = ["object", "patch", "add-link"];
+        let cid_original = Command::new("ipfs").args(&add_arguments).arg(original_filepath)
+            .output()
+            .expect(&format!("Failed adding {} version to ipfs", original_filepath));
+        let mut cid_current = String::from(String::from_utf8(cid_original.stdout).expect("Failed to parse ifps command output").trim());
+        for entry in version_paths{
+            let path_obj = entry.unwrap().path();
+            let path = path_obj.to_str().unwrap();
+            let filename = Path::new(path).file_name().unwrap().to_str().unwrap();
+
+            let cid_version = Command::new("ipfs").args(&add_arguments).arg(path)
+                .output()
+                .expect(&format!("Failed adding {} version to ipfs", path));
+
+
+            let cid_version = String::from(String::from_utf8(cid_version.stdout).expect("Failed to parse ipfs command output").trim());
+            let cid_current_output = Command::new("ipfs").args(&update_arguments)
+                .arg(&cid_current)
+                .arg(&filename)
+                .arg(&cid_version)
+                .output()
+                .expect(&format!("Failed to add link to {}", &filename));
+            cid_current = String::from(String::from_utf8(cid_current_output.stdout).expect("Failed to parse ipfs command output").trim());
+        }
+        cid_current
+    }
+}
 
 
 mod img_lib {
