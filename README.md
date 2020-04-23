@@ -12,17 +12,17 @@
 Ymir is a mighty giant from Norse Mythology. Iimir is a tool that smashes images into different sizes, and links them together with metadata on IPFS, the InterPlanetary File System.
 
 # QuickStart
-###Installing ipfs
+### Installing ipfs
 
 See [here](https://docs.ipfs.io/guides/guides/install/).
 
-###Setting up rust
+### Setting up rust
 To install rustup on Linux or MacOS 
 ```shell
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
-###Cloning, compiling and running
+### Cloning, compiling and running
 
 ```shell
 $ git clone git@github.com:fission-suite/iimir.git
