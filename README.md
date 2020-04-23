@@ -11,18 +11,29 @@
 
 Ymir is a mighty giant from Norse Mythology. Iimir is a tool that smashes images into different sizes, and links them together with metadata on IPFS, the InterPlanetary File System.
 
-An amazing description goes here!
-
-[Try it out!](https://linktoalivedemo.example.com)
-
 # QuickStart
+###Installing ipfs
 
+See [here](https://docs.ipfs.io/guides/guides/install/).
+
+###Setting up rust
+To install rustup on Linux or MacOS 
 ```shell
-# IPFS on MacOS, otherwise https://docs.ipfs.io/introduction/install/
-brew install ipfs
-brew service start ipfs
+$ curl https://sh.rustup.rs -sSf | sh
 ```
 
-# Table of Contents
+###Cloning, compiling and running
 
-# How To
+```shell
+$ git clone git@github.com:fission-suite/iimir.git
+$ cd iimir
+$ cargo run -q -- <path_to_image>
+```
+
+`cargo run` builds and runs in one command. You can always find the executable 
+at `target/debug/iimir`.
+
+# Known issues
+
+- When original file size is too small, its data gets overwritten in the output dag
+by a smaller version. This is due to a [documented go-ipfs issue](https://github.com/ipfs/go-ipfs/issues/7190).
