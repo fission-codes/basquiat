@@ -33,6 +33,34 @@ $ cargo run -q -- <path_to_image>
 `cargo run` builds and runs in one command. You can always find the executable 
 at `target/debug/iimir`.
 
+# Proposed metadata schema
+
+The root cid points to the original version with named links to other sizes.
+A given size `WxH.jpg` has its cid linked to *three times* by the root node :
+```
+_xH.jpg
+Wx_.jpg
+WxH.jpg
+```
+`W` and `X` are integers in pixel units.
+
+This schema can be subsequently expanded to include transformations other than rescaling,
+using an expandable syntax. For a given operation `c`, taking parameters `A` and `B`, 
+an operation on the given size `WxH.jpg` will also be linked to three times:
+```
+_xH.c-A-B.jpg
+Wx_.c-A-B.jpg
+WxH.c-A-B.jpg
+```
+
+This syntax is expandable to a sequence of operations by further concatenation.
+For instance, the following could represent a file resized to a certain height `H`,
+then cropped from the top (operation `ct`) to a certain height `Hp` then cropped from the left (`cl`) to a
+certain width `Wp` :
+```
+_xH.ct-Hp.cl-Wp.jpg
+```
+
 # Known issues
 
 - When original file size is too small, its data gets overwritten in the output dag
