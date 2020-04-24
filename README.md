@@ -61,6 +61,8 @@ certain width `Wp` :
 _xH.ct-Hp.cl-Wp.jpg
 ```
 
+This specification will also be used to configure iimir.
+
 # Known issues
 
 - When original file size is too small, its data gets overwritten in the output dag
