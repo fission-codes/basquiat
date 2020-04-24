@@ -35,8 +35,8 @@ at `target/debug/iimir`.
 
 # Proposed metadata schema
 
-The root cid points to the original version with named links to other sizes.
-A given size `WxH.jpg` has its cid linked to *three times* by the root node :
+The root CID points to the original version with named links to other sizes.
+A given size `WxH.jpg` has its CID linked to *three times* by the root node :
 ```
 _xH.jpg
 Wx_.jpg
@@ -45,7 +45,7 @@ WxH.jpg
 `W` and `X` are integers in pixel units.
 
 This schema can be subsequently expanded to include transformations other than rescaling,
-using an expandable syntax. For a given operation `c`, taking parameters `A` and `B`, 
+using an expandable syntax. For a given operation `c`, with parameters `A` and `B`, 
 an operation on the given size `WxH.jpg` will also be linked to three times:
 ```
 _xH.c-A-B.jpg
