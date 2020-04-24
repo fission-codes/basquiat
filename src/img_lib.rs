@@ -7,11 +7,13 @@ use std::io::Read;
 pub trait Resizable {
 
     fn new(path_to_image : &str) -> Self;
-    fn resize(&self, target_scale : f64, directory : &str, img_ext : &str);
+    fn resize(&self, target_scale : f64, directory : &str);
     fn write(&self, target_path : &str);
     fn render(&self) -> RenderedImage;
     fn render_original(&self) -> RenderedImage;
     fn render_size(&self, target_scale : f64) -> RenderedImage;
+    fn render_width(&self, target_width : i32) -> RenderedImage;
+    fn render_height(&self, target_height : i32) -> RenderedImage;
     fn get_width(&self) -> i32;
     fn get_height(&self) -> i32;
 }
@@ -38,9 +40,9 @@ impl Resizable for ImageLibVips {
         }
     }
 
-    fn resize(&self, target_scale : f64, directory : &str, img_ext : &str) {
+    fn resize(&self, target_scale : f64, directory : &str) {
         let resized = ops::resize(&self.data, target_scale).expect("Resize failed");
-        resized.image_write_to_file(&format!("{}/{}_{}.{}", directory, resized.get_width(), resized.get_height(), img_ext)).expect("Failed to write output");
+        resized.image_write_to_file(&format!("{}/{}_{}.{}", directory, resized.get_width(), resized.get_height(), &self.extension)).expect("Failed to write output");
     }
 
     fn write(&self, target_path : &str){
@@ -81,6 +83,16 @@ impl Resizable for ImageLibVips {
             extension: self.extension.clone()
         };
         resized.render()
+    }
+
+    fn render_width(&self, target_width: i32) -> RenderedImage{
+        let scale_factor = target_width as f64 / self.get_width() as f64;
+        self.render_size(scale_factor)
+    }
+
+    fn render_height(&self, target_height: i32) -> RenderedImage{
+        let scale_factor = target_height as f64 / self.get_height() as f64;
+        self.render_size(scale_factor)
     }
 
     fn get_width(&self) -> i32{

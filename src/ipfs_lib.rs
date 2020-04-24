@@ -1,35 +1,6 @@
-use std::{process::{Command, Stdio}, path::Path, fs::ReadDir};
+use std::process::{Command, Stdio};
 use crate::rendered::{RenderedImage, MultiImage};
 use std::io::{Write, Read};
-
-pub fn store(original_filepath : &str, version_paths: ReadDir) -> String{
-    let add_arguments = ["add", "-Q"];
-    let update_arguments = ["object", "patch", "add-link"];
-    let cid_original = Command::new("ipfs").args(&add_arguments).arg(original_filepath)
-        .output()
-        .expect(&format!("Failed adding {} version to ipfs", original_filepath));
-    let mut cid_current = String::from(String::from_utf8(cid_original.stdout).expect("Failed to parse ifps command output").trim());
-    for entry in version_paths{
-        let path_obj = entry.unwrap().path();
-        let path = path_obj.to_str().unwrap();
-        let filename = Path::new(path).file_name().unwrap().to_str().unwrap();
-
-        let cid_version = Command::new("ipfs").args(&add_arguments).arg(path)
-            .output()
-            .expect(&format!("Failed adding {} version to ipfs", path));
-
-
-        let cid_version = String::from(String::from_utf8(cid_version.stdout).expect("Failed to parse ipfs command output").trim());
-        let cid_current_output = Command::new("ipfs").args(&update_arguments)
-            .arg(&cid_current)
-            .arg(&filename)
-            .arg(&cid_version)
-            .output()
-            .expect(&format!("Failed to add link to {}", &filename));
-        cid_current = String::from(String::from_utf8(cid_current_output.stdout).expect("Failed to parse ipfs command output").trim());
-    }
-    cid_current
-}
 
 impl RenderedImage {
 
@@ -54,44 +25,32 @@ impl RenderedImage {
 }
 
 impl MultiImage {
-    pub fn append(&mut self, child: &mut RenderedImage) -> (){
+    pub fn append(&mut self, child: &mut RenderedImage) -> () {
         match child.cid {
             Some(_) => (),
             None => child.add()
         }
         // println!("Current cid: {}", &self.cid);
-        let update_arguments = ["object", "patch", "add-link"];
-        let filename = child.filename();
         let child_cid = child.cid.as_ref().unwrap();
-        let new_cid = Command::new("ipfs").args(&update_arguments)
-            .arg(&self.cid)
-            .arg(&filename)
-            .arg(child_cid)
-            .output()
-            .expect(&format!("Failed to add link to {}", &filename));
-        // println!("Added {}", &filename);
-        self.cid = String::from(String::from_utf8(new_cid.stdout).expect("Failed to parse ipfs command output").trim());
+        let filenames = child.filenames();
+        for filename in filenames.iter() {
+            self.add_link(filename, child_cid);
+        }
     }
 
-    pub fn _append_original(&mut self, child: &mut RenderedImage) -> (){
-        match child.cid {
-            Some(_) => (),
-            None => child.add()
-        }
-        // println!("Current cid: {}", &self.cid);
+    fn add_link(&mut self, filename: &str, child_cid: &str){
         let update_arguments = ["object", "patch", "add-link"];
-        let filename = String::from("");
-        let child_cid = child.cid.as_ref().unwrap();
         let new_cid = Command::new("ipfs").args(&update_arguments)
             .arg(&self.cid)
-            .arg(&filename)
+            .arg("--")
+            .arg(filename)
             .arg(child_cid)
             .output()
             .expect(&format!("Failed to add link to {}", &filename));
-        // println!("Added {}", &filename);
-        self.cid = String::from(String::from_utf8(new_cid.stdout).expect("Failed to parse ipfs command output").trim());
+        // println!("{}", String::from_utf8(new_cid.stderr).unwrap());
+        self.cid = String::from(String::from_utf8(new_cid.stdout).expect("Failed to parse ipfs command output").trim())
+
     }
 }
-
 
 
