@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 libvips = "1.2.0"
 clap = { git = "https://github.com/clap-rs/clap/" }
+regex = "1"

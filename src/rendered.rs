@@ -12,11 +12,11 @@ pub struct MultiImage {
 
 impl RenderedImage {
     pub fn filenames(&self) -> [String; 3]{
-        [format!("{}_{}.{}", self.width, self.height, &self.extension),
-        format!("{}_-.{}", self.width, &self.extension),
-        format!("-_{}.{}", self.height, &self.extension)]
+        [format!("{}x{}.{}", self.width, self.height, &self.extension),
+        format!("{}x_.{}", self.width, &self.extension),
+        format!("_x{}.{}", self.height, &self.extension)]
     }
     pub fn _filename(&self) -> String{
-        format!("{}_{}.{}", self.width, self.height, &self.extension)
+        format!("{}x{}.{}", self.width, self.height, &self.extension)
     }
 }

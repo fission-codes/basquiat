@@ -3,6 +3,7 @@ use crate::rendered::RenderedImage;
 use std::path::Path;
 use std::fs;
 use std::io::Read;
+use crate::cfg_parser::{Config, Resize};
 
 pub trait Resizable {
 
@@ -14,6 +15,7 @@ pub trait Resizable {
     fn render_size(&self, target_scale : f64) -> RenderedImage;
     fn render_width(&self, target_width : i32) -> RenderedImage;
     fn render_height(&self, target_height : i32) -> RenderedImage;
+    fn render_config(&self, config: &Config) -> RenderedImage;
     fn get_width(&self) -> i32;
     fn get_height(&self) -> i32;
 }
@@ -93,6 +95,14 @@ impl Resizable for ImageLibVips {
     fn render_height(&self, target_height: i32) -> RenderedImage{
         let scale_factor = target_height as f64 / self.get_height() as f64;
         self.render_size(scale_factor)
+    }
+
+    fn render_config(&self, config: &Config) -> RenderedImage{
+        return match config.dimensions {
+            Resize::Width(width) => self.render_width(width),
+            Resize::Height(height) => self.render_height(height),
+            Resize::Original => self.render_original()
+        }
     }
 
     fn get_width(&self) -> i32{
