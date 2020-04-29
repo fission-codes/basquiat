@@ -37,21 +37,30 @@ impl Parser {
         let lines = BufReader::new(file).lines();
         let mut configs : Vec<Config> = Vec::new();
         for line in lines {
-            configs.push(self.parse_from_string(&line.unwrap()));
+            match self.parse_from_string(&line.unwrap()) {
+                Some(conf) => configs.push(conf),
+                None => ()
+            }
         }
         configs
     }
 
-    pub fn parse_from_string(&self, line: &str) -> Config{
+    pub fn parse_from_string(&self, line: &str) -> Option<Config>{
+        let first_char = line.chars().next();
+        match first_char {
+            Some('#') => return None,
+            None => return None,
+            Some(_) => ()
+        }
         let matched= self.re.captures(line).expect("Syntax Error in cfg file");
         let width = matched.name("width").unwrap().as_str();
         let height = matched.name("height").unwrap().as_str();
         if width == "_" && height == "_"{
-            return Config{dimensions: Resize::Original}
+            return Some(Config{dimensions: Resize::Original})
         }
         if width == "_" {
-            return Config{dimensions: Resize::Height(height.parse::<i32>().unwrap())}
+            return Some(Config{dimensions: Resize::Height(height.parse::<i32>().unwrap())})
         }
-        return Config{dimensions: Resize::Width(width.parse::<i32>().unwrap())}
+        return Some(Config{dimensions: Resize::Width(width.parse::<i32>().unwrap())})
     }
 }
