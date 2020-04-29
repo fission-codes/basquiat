@@ -18,15 +18,30 @@ See [here](https://docs.ipfs.io/guides/guides/install/).
 
 ### Setting up rust
 To install rustup on Linux or MacOS 
-```shell
+```shell script
 $ curl https://sh.rustup.rs -sSf | sh
+```
+
+### Setting up dependencies
+The `libvips` library needs to be installed :
+
+On mac os
+```shell script
+brew install libvips`
+```
+
+On Ubuntu
+```shell script
+
+apt-get install libvips
 ```
 
 ### Cloning, compiling and running
 
-```shell
+```shell script
 $ git clone git@github.com:fission-suite/basquiat.git
 $ cd basquiat
+$ ipfs daemon > ipfsd_log.txt #The ipfs daemon must be running!
 $ cargo run -q -- <path_to_image>
 ```
 
