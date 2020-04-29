@@ -1,6 +1,6 @@
 ![](https://github.com/fission-suite/PROJECTNAME/raw/master/assets/logo.png?sanitize=true)
 
-# Interplanetary Image Metadata and Resizer
+# Basquiat - Image Resizing for ipfs
 
 [![Build Status](https://travis-ci.org/fission-suite/PROJECTNAME.svg?branch=master)](https://travis-ci.org/fission-suite/PROJECTNAME)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/fission-suite/blob/master/LICENSE)
@@ -9,8 +9,8 @@
 [![Discord](https://img.shields.io/discord/478735028319158273.svg)](https://discord.gg/zAQBDEq)
 [![Discourse](https://img.shields.io/discourse/https/talk.fission.codes/topics)](https://talk.fission.codes)
 
-Ymir is a mighty giant from Norse Mythology. Iimir is a tool that smashes images into different sizes, and links them together with metadata on IPFS, the InterPlanetary File System.
-
+Basquiat is a CLI tool that performs batch image resizing operations and returns an ipfs CID that links to the original,
+with metadata pointing to all generated versions using a general-purpose schema.
 # QuickStart
 ### Installing ipfs
 
@@ -25,13 +25,13 @@ $ curl https://sh.rustup.rs -sSf | sh
 ### Cloning, compiling and running
 
 ```shell
-$ git clone git@github.com:fission-suite/iimir.git
-$ cd iimir
+$ git clone git@github.com:fission-suite/basquiat.git
+$ cd basquiat
 $ cargo run -q -- <path_to_image>
 ```
 
 `cargo run` builds and runs in one command. You can always find the executable 
-at `target/debug/iimir`.
+at `target/debug/basquiat`.
 
 # Proposed metadata schema
 
