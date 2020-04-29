@@ -13,7 +13,7 @@ use cfg_parser::Config;
 #[clap(version="0.1")]
 struct Opts {
     /// path to config file
-    #[clap(short="c", long="config", default_value="iimir.cfg")]
+    #[clap(short="c", long="config", default_value="basquiat.cfg")]
     cfg_path: String,
     /// path to image file
     file_path: String

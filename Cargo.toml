@@ -1,5 +1,5 @@
 [package]
-name = "iimir"
+name = "basquiat"
 version = "0.1.0"
 authors = ["Elliott Benisty <elliott.benisty@polytechnique.edu>"]
 edition = "2018"
