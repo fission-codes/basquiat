@@ -7,7 +7,14 @@ pub struct RenderedImage {
 }
 
 pub struct MultiImage {
-    pub cid : String
+    pub cid : String,
+    pub links : Vec<String>,
+}
+
+impl MultiImage {
+    pub fn new(cid: String) -> MultiImage{
+        MultiImage{cid, links: Vec::new()}
+    }
 }
 
 impl RenderedImage {

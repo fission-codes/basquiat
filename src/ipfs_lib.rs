@@ -5,22 +5,7 @@ use std::io::{Write, Read};
 impl RenderedImage {
 
     pub fn add(&mut self) -> (){
-        let add_arguments = ["add", "-Q"];
-        let process = Command::new("ipfs").args(&add_arguments)
-            .stdin(Stdio::piped())
-            .stdout(Stdio::piped())
-            .spawn()
-            .expect(&format!("Failed adding to ipfs"));
-        match process.stdin.unwrap().write_all(self.buffer.as_slice()) {
-            Err(why) => panic!("couldn't write to stdin : {:?}", why),
-            Ok(_) => ()
-        }
-        let mut cid = String::new();
-        match process.stdout.unwrap().read_to_string(&mut cid){
-            Err(why) => panic!("couldn't read stdout : {:?}", why),
-            Ok(_) => ()
-        };
-        self.cid = Some(String::from(cid.trim()));
+        self.cid = Some(add_buffer(self.buffer.as_slice()));
     }
 }
 
@@ -48,9 +33,37 @@ impl MultiImage {
             .output()
             .expect(&format!("Failed to add link to {}", &filename));
         // println!("{}", String::from_utf8(new_cid.stderr).unwrap());
-        self.cid = String::from(String::from_utf8(new_cid.stdout).expect("Failed to parse ipfs command output").trim())
-
+        self.cid = String::from(String::from_utf8(new_cid.stdout).expect("Failed to parse ipfs command output").trim());
+        self.links.push(String::from(filename))
     }
+
+    pub fn generate_html(&mut self){
+        let mut output_text = String::new();
+        for link in self.links.iter(){
+            output_text = format!("{}\n<p><a href=\"{}\">{}</a></p", &output_text, link, link)
+        }
+        let cid = add_buffer(output_text.as_bytes());
+        self.add_link("thumbnails.html", &cid);
+    }
+}
+
+fn add_buffer(buffer: &[u8]) -> String {
+    let add_arguments = ["add", "-Q"];
+    let process = Command::new("ipfs").args(&add_arguments)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect(&format!("Failed adding to ipfs"));
+    match process.stdin.unwrap().write_all(buffer) {
+        Err(why) => panic!("couldn't write to stdin : {:?}", why),
+        Ok(_) => ()
+    }
+    let mut cid = String::new();
+    match process.stdout.unwrap().read_to_string(&mut cid){
+        Err(why) => panic!("couldn't read stdout : {:?}", why),
+        Ok(_) => ()
+    };
+    String::from(cid.trim())
 }
 
 

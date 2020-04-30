@@ -15,6 +15,9 @@ struct Opts {
     /// path to config file
     #[clap(short="c", long="config", default_value="basquiat.cfg")]
     cfg_path: String,
+    /// Don't include thumbnails.html
+    #[clap(short="s", long="skip-html")]
+    skip_html: bool,
     /// path to image file
     file_path: String
 }
@@ -32,7 +35,12 @@ fn main() {
     let _app = img_lib::init();
 
     let image = img_lib::ImageLibVips::new(img_path_str);
-    let output = batch_resize_buffer(&image, &configs);
+    let mut output = batch_resize_buffer(&image, &configs);
+
+    if !&opts.skip_html {
+        output.generate_html();
+    }
+
     println!("{}", &output.cid);
 
 
@@ -50,7 +58,7 @@ fn _batch_resize<T : Resizable>(image : &T, directory : &str, target_scales : &[
 fn batch_resize_buffer<T : Resizable>(image : &T, configs : &Vec<Config>) -> MultiImage {
     let mut original = image.render_original();
     original.add();
-    let mut root = MultiImage { cid: original.cid.unwrap()};
+    let mut root = MultiImage::new(original.cid.unwrap());
 
     for target in configs.iter() {
         let mut rendered = image.render_config(target);
