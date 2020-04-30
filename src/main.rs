@@ -46,7 +46,7 @@ fn main() {
     if opts.quiet {
         println!("{}", &output.cid);
     } else {
-        println!("http://localhost:8080/ipfs/{}", &output.cid);
+        println!("Root\t: http://localhost:8080/ipfs/{}\nExplore\t: http://localhost:8080/ipfs/{}/thumbnails.html", &output.cid, &output.cid);
     }
 
 
