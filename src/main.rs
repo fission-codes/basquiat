@@ -18,6 +18,9 @@ struct Opts {
     /// Don't include thumbnails.html
     #[clap(short="s", long="skip-html")]
     skip_html: bool,
+    /// Only output raw CID
+    #[clap(short="q", long="quiet")]
+    quiet: bool,
     /// path to image file
     file_path: String
 }
@@ -40,8 +43,11 @@ fn main() {
     if !&opts.skip_html {
         output.generate_html();
     }
-
-    println!("{}", &output.cid);
+    if opts.quiet {
+        println!("{}", &output.cid);
+    } else {
+        println!("http://localhost:8080/ipfs/{}", &output.cid);
+    }
 
 
 }

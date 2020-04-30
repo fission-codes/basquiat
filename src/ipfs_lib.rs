@@ -40,7 +40,7 @@ impl MultiImage {
     pub fn generate_html(&mut self){
         let mut output_text = String::new();
         for link in self.links.iter(){
-            output_text = format!("{}\n<p><a href=\"{}\">{}</a></p", &output_text, link, link)
+            output_text = format!("{}\n<br><a href=\"{}\">{}</a>", &output_text, link, link)
         }
         let cid = add_buffer(output_text.as_bytes());
         self.add_link("thumbnails.html", &cid);
@@ -65,5 +65,3 @@ fn add_buffer(buffer: &[u8]) -> String {
     };
     String::from(cid.trim())
 }
-
-
