@@ -37,9 +37,9 @@ impl MultiImage {
         self.links.push(String::from(filename))
     }
 
-    pub fn generate_html(&mut self){
+    pub fn generate_html(&mut self, original_name: &str){
         // TO DO (bmann): I'd link to have the the original file name as title here, and link available to show the original, too
-        let mut output_text = String::from("<html><head><style> img { padding: 10px; } </style><title>ORIGINAL_FILE</title></head><body>\n<h1>ORIGINAL_FILE Basquiat Generated Thumbnails</h1>\n<table>\n<tr><th>Thumbnail</th><th>Info</th></tr>");
+        let mut output_text = format!("<html><head><style> img {{ padding: 10px; }} </style><title>{}</title></head><body>\n<h1>{} - Basquiat Generated Thumbnails</h1>\n<table>\n<tr><th>Thumbnail</th><th>Info</th></tr>", original_name, original_name);
         for link in self.links.iter(){
             output_text = format!("{}\n<tr><td><a href='{}'><img src='{}'/></a></td><td>{}</td></tr>", &output_text, link, link, link)
         }

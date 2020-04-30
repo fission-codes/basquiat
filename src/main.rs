@@ -34,6 +34,7 @@ fn main() {
 
     let img_path = Path::new(&opts.file_path);
     let img_path_str = img_path.to_str().unwrap();
+    let img_name = img_path.file_name().unwrap().to_str().unwrap();
 
     let _app = img_lib::init();
 
@@ -41,7 +42,7 @@ fn main() {
     let mut output = batch_resize_buffer(&image, &configs);
 
     if !&opts.skip_html {
-        output.generate_html();
+        output.generate_html(img_name);
     }
     if opts.quiet {
         println!("{}", &output.cid);
