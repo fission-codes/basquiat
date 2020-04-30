@@ -48,6 +48,11 @@ $ cargo run -q -- <path_to_image>
 `cargo run` builds and runs in one command. You can always find the executable 
 at `target/debug/basquiat`.
 
+### Exploring the DAG
+
+By default, a simple html page presents a list of the available versions at `<root_cid>/thumbnails.html`. This feature
+can be disabled by a flag as detailed in the command's `--help` message.
+
 # Proposed metadata schema
 
 The root CID points to the original version with named links to other sizes.
