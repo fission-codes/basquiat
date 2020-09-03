@@ -3,10 +3,12 @@ mod ipfs_lib;
 mod img_lib;
 mod rendered;
 mod cfg_parser;
+mod autoscale;
 use img_lib::Resizable;
 use rendered::MultiImage;
 use clap::Clap;
 use cfg_parser::Config;
+use autoscale::autoscale;
 
 
 #[derive(Clap)]
@@ -21,16 +23,25 @@ struct Opts {
     /// Only output raw CID
     #[clap(short="q", long="quiet")]
     quiet: bool,
-    /// path to image file
+    /// Uses first line of configuration to auto-generate target scales
+    #[clap(short="a", long="auto-spread", default_value="0")]
+    autospread_n: String,
+    /// Path to image file
     file_path: String
 }
 
 fn main() {
     let opts : Opts = Opts::parse();
 
+    let spread_val: i32 = opts.autospread_n.parse().expect("Invalid auto-spread value entered. Must be integer.");
+
     let cfg_path = Path::new(&opts.cfg_path);
     let config_parser = cfg_parser::Parser::new();
-    let configs = config_parser.parse_file(cfg_path);
+    let mut configs = config_parser.parse_file(cfg_path);
+
+    if spread_val != 0 {
+        configs = autoscale(&configs,  spread_val);
+    }
 
     let img_path = Path::new(&opts.file_path);
     let img_path_str = img_path.to_str().unwrap();

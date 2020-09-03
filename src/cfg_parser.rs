@@ -1,6 +1,8 @@
 use std::{fs::File, path::Path, io::{BufReader, BufRead}};
+use std::ops::Mul;
 use regex::Regex;
 
+#[derive(Copy, Clone)]
 pub struct Config{
     pub dimensions: Resize,
     // pub operations: Option<Vec<Operation>>
@@ -10,6 +12,7 @@ pub struct Parser{
     re: Regex
 }
 
+#[derive(Copy, Clone)]
 pub enum Resize{
     Width(i32),
     Height(i32),
@@ -63,4 +66,17 @@ impl Parser {
         }
         return Some(Config{dimensions: Resize::Width(width.parse::<i32>().unwrap())})
     }
+}
+
+impl Mul<f32> for Resize {
+    type Output = Resize;
+
+    fn mul(self, rhs: f32) -> Resize{
+        match self {
+            Resize::Width(n) => return Resize::Width(((n as f32)*rhs).round() as i32),
+            Resize::Height(n) => return Resize::Height(((n as f32)*rhs).round() as i32),
+            Resize::Original => return Resize::Original
+        }
+    }
+    
 }
